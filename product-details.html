@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Mini-Me</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .product-details-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .product-gallery {
+            position: relative;
+        }
+
+        .main-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .thumbnail:hover {
+            opacity: 0.8;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-info h1 {
+            color: #ff69b4;
+            margin-bottom: 20px;
+        }
+
+        .product-price {
+            font-size: 24px;
+            color: #ff69b4;
+            margin: 20px 0;
+        }
+
+        .product-description {
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .product-details {
+            margin: 30px 0;
+        }
+
+        .product-details h3 {
+            color: #ff69b4;
+            margin-bottom: 15px;
+        }
+
+        .product-details ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .product-details li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .product-details li:before {
+            content: "•";
+            color: #ff69b4;
+            position: absolute;
+            left: 0;
+        }
+
+        .add-to-cart-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 10px;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .quantity-selector label {
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .quantity-selector input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .add-to-cart-btn {
+            background: var(--gradient);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-to-shop {
+            display: inline-block;
+            margin-top: 20px;
+            color: #ff69b4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-to-shop:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .product-details-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="images/logo.png" alt="Mini-Me Logo" class="logo">
+            <h1 class="logo-text">Mini-Me</h1>
+        </div>
+    </header>
+
+    <div class="product-details-container">
+        <div class="product-gallery">
+            <img id="main-image" src="" alt="Product Image" class="main-image">
+            <div class="thumbnail-grid" id="thumbnail-grid"></div>
+        </div>
+        <div class="product-info">
+            <h1 id="product-name"></h1>
+            <p class="product-price" id="product-price"></p>
+            <p class="product-description" id="product-description"></p>
+            <div class="product-details">
+                <h3>Product Details</h3>
+                <ul id="product-details-list"></ul>
+            </div>
+            <div class="add-to-cart-section">
+                <div class="quantity-selector">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" value="1" min="1" max="10">
+                </div>
+                <button onclick="addToCartFromDetails()" class="add-to-cart-btn">Add to Cart</button>
+            </div>
+            <a href="index.html#shop" class="back-to-shop">← Back to Shop</a>
+        </div>
+    </div>
+
+    <script>
+        // Get product ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = parseInt(urlParams.get('id'));
+
+        // Product data (you should move this to a separate file or fetch from an API)
+        const products = [
+            {
+                id: 1,
+                name: 'Cute T-Shirt',
+                price: 19.99,
+                description: 'Adorable cotton t-shirt with cute design',
+                category: 'tops',
+                size: '2-3y',
+                images: ['product1-1.jpg', 'product1-2.jpg'],
+                details: [
+                    '100% cotton',
+                    'Machine washable',
+                    'Available in sizes 2-3y',
+                    'Cute design on front'
+                ]
+            },
+            {
+                id: 2,
+                name: 'Stylish Pants',
+                price: 24.99,
+                description: 'Comfortable and stylish pants for active kids',
+                category: 'bottoms',
+                size: '4-5y',
+                images: ['product2-1.jpg', 'product2-2.jpg'],
+                details: [
+                    'Stretchy material',
+                    'Machine washable',
+                    'Available in sizes 4-5y',
+                    'Elastic waistband'
+                ]
+            },
+            {
+                id: 3,
+                name: 'Adorable Dress',
+                price: 29.99,
+                description: 'Beautiful dress perfect for special occasions',
+                category: 'dresses',
+                size: '2-3y',
+                images: ['product3-1.jpg', 'product3-2.jpg'],
+                details: [
+                    'Soft fabric',
+                    'Hand wash recommended',
+                    'Available in sizes 2-3y',
+                    'Matching bow included'
+                ]
+            },
+            {
+                id: 4,
+                name: 'Cozy Jacket',
+                price: 34.99,
+                description: 'Warm and cozy jacket for cold days',
+                category: 'tops',
+                size: '6-7y',
+                images: ['product4-1.jpg', 'product4-2.jpg'],
+                details: [
+                    'Warm lining',
+                    'Machine washable',
+                    'Available in sizes 6-7y',
+                    'Zipper closure'
+                ]
+            }
+        ];
+
+        // Generate products 5-100
+        for (let i = 5; i <= 100; i++) {
+            const categories = ['tops', 'bottoms', 'dresses', 'accessories'];
+            const sizes = ['2-3y', '4-5y', '6-7y', '8-9y', '10-12y'];
+            const basePrice = 19.99;
+            const priceVariation = Math.floor(Math.random() * 30) + 1; // Random price variation between 1-30
+
+            products.push({
+                id: i,
+                name: `Product ${i}`,
+                price: (basePrice + priceVariation).toFixed(2),
+                description: `Description for product ${i}`,
+                category: categories[Math.floor(Math.random() * categories.length)],
+                size: sizes[Math.floor(Math.random() * sizes.length)],
+                images: [`product${i}-1.jpg`, `product${i}-2.jpg`],
+                details: [
+                    'High-quality material',
+                    'Machine washable',
+                    `Available in size ${sizes[Math.floor(Math.random() * sizes.length)]}`,
+                    'Perfect for everyday wear'
+                ]
+            });
+        }
+
+        // Find the product
+        const product = products.find(p => p.id === productId);
+
+        if (product) {
+            // Update page title
+            document.title = `${product.name} - Mini-Me`;
+
+            // Update main image
+            document.getElementById('main-image').src = `images/${product.images[0]}`;
+
+            // Create thumbnails
+            const thumbnailGrid = document.getElementById('thumbnail-grid');
+            product.images.forEach(image => {
+                const thumbnail = document.createElement('img');
+                thumbnail.src = `images/${image}`;
+                thumbnail.alt = product.name;
+                thumbnail.className = 'thumbnail';
+                thumbnail.onclick = () => {
+                    document.getElementById('main-image').src = `images/${image}`;
+                };
+                thumbnailGrid.appendChild(thumbnail);
+            });
+
+            // Update product info
+            document.getElementById('product-name').textContent = product.name;
+            document.getElementById('product-price').textContent = `$${product.price}`;
+            document.getElementById('product-description').textContent = product.description;
+
+            // Update product details
+            const detailsList = document.getElementById('product-details-list');
+            product.details.forEach(detail => {
+                const li = document.createElement('li');
+                li.textContent = detail;
+                detailsList.appendChild(li);
+            });
+        } else {
+            // Product not found
+            document.body.innerHTML = '<h1>Product not found</h1><a href="index.html#shop">Back to Shop</a>';
+        }
+
+        function addToCartFromDetails() {
+            const quantity = parseInt(document.getElementById('quantity').value);
+            if (quantity < 1 || quantity > 10) {
+                alert('Please select a quantity between 1 and 10');
+                return;
+            }
+
+            // Create cart item
+            const cartItem = {
+                productId: product.id,
+                name: product.name,
+                price: product.price,
+                quantity: quantity,
+                image: `images/${product.images[0]}`
+            };
+
+            // Get existing cart or create new one
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push(cartItem);
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            alert(`${quantity} ${product.name}(s) added to cart!`);
+        }
+    </script>
+</body>
+</html> 

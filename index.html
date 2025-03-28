@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini-Me Clothing</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="C:\Users\11\Desktop\ggh\images\product100-100.jpg" alt="Mini-Me Logo" class="logo">
+            <h1 class="logo-text">Mini-Me</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showTab('home')" class="tab-link">Home</a></li>
+                <li><a href="#" onclick="showTab('shop')" class="tab-link">Shop</a></li>
+                <li><a href="#" onclick="showTab('scan')" class="tab-link">Scan QR</a></li>
+                <li><a href="#" onclick="showTab('about')" class="tab-link">About</a></li>
+                <li><a href="#" onclick="showTab('cart')" class="tab-link">Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Home Tab -->
+    <div id="home" class="tab-content">
+        <section class="hero">
+            <h1 class="animate-title">Welcome to Mini-Me</h1>
+            <p class="animate-subtitle">Stylish clothing for your little ones.</p>
+            <a href="#" onclick="showTab('shop')" class="btn animate-button">Shop Now</a>
+        </section>
+        <section class="featured-products">
+            <h2 class="section-title">Featured Products</h2>
+            <div class="featured-grid">
+                <!-- Featured products will be loaded dynamically -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Shop Tab -->
+    <div id="shop" class="tab-content" style="display: none;">
+        <section class="products">
+            <h2 class="section-title">Our Collection</h2>
+            <div class="filters">
+                <select id="category-filter" onchange="filterProducts()">
+                    <option value="all">All Categories</option>
+                    <option value="tops">Tops</option>
+                    <option value="bottoms">Bottoms</option>
+                    <option value="dresses">Dresses</option>
+                    <option value="accessories">Accessories</option>
+                </select>
+                <select id="size-filter" onchange="filterProducts()">
+                    <option value="all">All Sizes</option>
+                    <option value="2-3y">2-3 Years</option>
+                    <option value="4-5y">4-5 Years</option>
+                    <option value="6-7y">6-7 Years</option>
+                    <option value="8-10y">8-10 Years</option>
+                </select>
+            </div>
+            <div class="products-grid">
+                <!-- Products will be dynamically loaded here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Scan Tab -->
+    <div id="scan" class="tab-content" style="display: none;">
+        <section class="scan-section">
+            <h2 class="section-title">Scan QR Code</h2>
+            <div class="scan-container">
+                <div id="reader"></div>
+                <div class="scan-instructions">
+                    <p>Point your camera at the product's QR code to view details</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- About Tab -->
+    <div id="about" class="tab-content" style="display: none;">
+        <section class="about-content">
+            <h2 class="section-title">About Mini-Me</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p>We provide high-quality, adorable clothing for children that combines style with comfort. Our collection is carefully curated to ensure the best for your little ones.</p>
+                    <p>Our mission is to make every child feel special and confident in their clothing choices.</p>
+                </div>
+                <div class="about-image">
+                    <img src="C:\Users\11\Desktop\ggh\images\product2-2.jpg" alt="About Mini-Me">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Cart Tab -->
+    <div id="cart" class="tab-content" style="display: none;">
+        <section class="cart-items">
+            <h2 class="section-title">Your Cart</h2>
+            <div id="cart-content">
+            </div>
+            <div class="cart-summary">
+                <div class="cart-total">
+                    <h3>Total: <span id="cart-total-amount">$0.00</span></h3>
+                </div>
+                <a href="#" onclick="showTab('checkout')" class="btn">Proceed to Checkout</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Checkout Tab -->
+    <div id="checkout" class="tab-content" style="display: none;">
+        <section class="checkout-form">
+            <h2 class="section-title">Checkout</h2>
+            <div class="checkout-content">
+                <form id="order-form" action="https://formspree.io/f/xqapknen" method="POST">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone number:</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <textarea id="address" name="address" required></textarea>
+                    </div>
+                    <div id="order-details">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Submit Order" onclick="clearCart()" class="btn">
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="hideLightbox()">
+        <div id="lightbox-content" class="lightbox-content"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
